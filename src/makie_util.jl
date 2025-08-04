@@ -77,19 +77,33 @@ ppt_MakieConfig(;target = :presentation, filetype = "png", fontsize=18, size_inc
 paper_MakieConfig(;size_inches = cm2inch.((8.3,8.3/golden_ratio)), filetype = "pdf", kwargs...) = MakieConfig(;size_inches, filetype, kwargs...)
 
 """
-    pdf_figure_axis(...; makie_config, ....)
-    pdf_figure(width2height, xfac=1.0; makie_config)
-    pdf_figure(size_inches = cm2inch.((8.3,8.3/golden_ratio)); fontsize=9, pt_per_unit = 0.75)
+    figure_conf(; makie_config)
+    figure_conf(width2height, xfac=1.0; makie_config)
+    
+    figure_conf(size_inches = cm2inch.((8.3,8.3/golden_ratio)); fontsize=9, pt_per_unit = 0.75)
 
 Creates a figure with specified resolution/size and fontsize 
 for given figure size. 
-`pdf_figure_axis`, in addition returns an Makie.Axis created with kwargs.
-They use by default `pt_per_unit=0.75` to conform to png display and save. 
+
+The first two constructors apply the settings from the config, with the possibility
+to adjust the width/height ration (e.g. to `golden_ratio`) or multiply
+the default x-width.
+
+The last constructor sets the properties without referring to a config.
+It uses by default `pt_per_unit=0.75` to conform to png display and save. 
 Remember to devide fontsize and other sizes specified elsewhere by this factor.
 See also [`cm2inch`](@ref) and `save`.
 """    
-function pdf_figure end;
-function pdf_figure_axis end;    
+function figure_conf end;
+
+
+"""
+    figure_conf_axis(...; makie_config, kwrags...)
+
+Call `figure_conf` but return a tuple `(figure, axis)`.
+The keyword arguments are passed to the `Axis(; kwrawgs...)` call.
+"""       
+function figure_conf_axis end;    
 
 """
     save_with_config(filename, fig; makie_config = MakieConfig(), args...)
@@ -119,7 +133,7 @@ function axis_contents end
 """
     density_params(chns, pars=names(chns, :parameters); 
         makie_config::MakieConfig=MakieConfig(), 
-        fig = pdf_figure(cm2inch.((8.3,8.3/1.618)); makie_config), 
+        fig = figure_conf(cm2inch.((8.3,8.3/1.618)); makie_config), 
         column = 1, xlims=nothing, 
         labels=nothing, colors = nothing, ylabels = nothing, normalize = false, 
         kwargs_axis = repeat([()],length(pars)), 

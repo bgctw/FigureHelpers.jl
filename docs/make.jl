@@ -3,6 +3,13 @@ using FigureHelpers
 
 push!(LOAD_PATH,"../src/")
 makedocs(sitename="FigureHelpers.jl",
+    authors="Thomas Wutzler <twutz@bgc-jena.mpg.de> and contributors",
+    repo = Remotes.GitHub("bgctw", "FigureHelpers.jl"),
+    # format=Documenter.HTML(;
+    #     prettyurls=get(ENV, "CI", "false") == "true",
+    #     canonical="https://EarthyScience.github.io/Bigleaf.jl",
+    #     assets=String[],
+    # ),
          doctest  = false, 
          pages = [
             "Home" => "index.md",

@@ -18,10 +18,24 @@ So we provide it here.
 golden_ratio
 ```
 
-## Makie Layout switching
+## Makie Layout switching and Figure generation
 
+Generating the same plot for paper and for a presentation, requires adjusting
+properties such as figure sizes, fontsizes, and graphics format.
+The following class helps to collect them and provide them to functions below
 ```@docs
 MakieConfig
+```
+
+### creating figures with adjusted sizes and font-sizes
+
+```@docs
+figure_conf
+figure_conf_axis
+```
+### saving figures to correct format and dpi-resolution
+
+```@docs
 save_with_config
 ```
 

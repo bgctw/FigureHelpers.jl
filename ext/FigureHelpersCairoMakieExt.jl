@@ -10,8 +10,8 @@ using FigureHelpers
 using KernelDensity: KernelDensity
 using StatsBase
 
-function CP.pdf_figure_axis(args...; makie_config::MakieConfig = MakieConfig(), kwargs...) 
-    fig = pdf_figure(args...; makie_config)
+function CP.figure_conf_axis(args...; makie_config::MakieConfig = MakieConfig(), kwargs...) 
+    fig = figure_conf(args...; makie_config)
     fig, Axis(fig[1,1]; kwargs...)
 end
 
@@ -22,20 +22,20 @@ function get_fontsize_from_config(cfg)
     cfg.fontsize ./ cfg.pt_per_unit
 end
 
-function CP.pdf_figure(; makie_config::MakieConfig = MakieConfig())
+function CP.figure_conf(; makie_config::MakieConfig = MakieConfig())
     size = get_size_from_config(makie_config)
     fontsize = get_fontsize_from_config(makie_config)
     Figure(;size, fontsize)
 end
-function CP.pdf_figure(size_inches::NTuple{2}; makie_config::MakieConfig = MakieConfig())
+function CP.figure_conf(size_inches::NTuple{2}; makie_config::MakieConfig = MakieConfig())
     makie_config = MakieConfig(makie_config; size_inches)
-    pdf_figure(;makie_config)
+    figure_conf(;makie_config)
 end
-function CP.pdf_figure(width2height::Number, xfac=1.0; makie_config::MakieConfig = MakieConfig())
+function CP.figure_conf(width2height::Number, xfac=1.0; makie_config::MakieConfig = MakieConfig())
     wx = makie_config.size_inches[1] * xfac
     wy = wx/width2height
     makie_config_resized = MakieConfig(makie_config; size_inches = (wx, wy))
-    pdf_figure(;makie_config = makie_config_resized)
+    figure_conf(;makie_config = makie_config_resized)
 end
 
 
@@ -64,7 +64,7 @@ CP.axis_contents(figpos::GridPosition) = axis_contents(first(contents(figpos)))
 # plot density from MCMCChains.value
 function CP.density_params(chns, pars=names(chns, :parameters); 
     makie_config::MakieConfig=MakieConfig(), 
-    fig = pdf_figure(cm2inch.((8.3,8.3/1.618)); makie_config), 
+    fig = figure_conf(cm2inch.((8.3,8.3/1.618)); makie_config), 
     column = 1, xlims=nothing, 
     labels=nothing, colors = nothing, ylabels = nothing, normalize = false, 
     kwargs_axis = repeat([()],length(pars)), 
@@ -125,7 +125,7 @@ at the borders,
 """
 function histogram_params(chns, pars=names(chns, :parameters); 
   makie_config::MakieConfig=MakieConfig(), 
-  fig = pdf_figure(cm2inch.((8.3,8.3/1.618)); makie_config), 
+  fig = figure_conf(cm2inch.((8.3,8.3/1.618)); makie_config), 
   column = 1, xlims=nothing, 
   labels=nothing, colors = nothing, ylabels = nothing, normalization = :pdf, 
   kwargs_axis = repeat([()],length(pars)), 
