@@ -3,24 +3,6 @@ const GROUP = get(ENV, "GROUP", "All") # defined in in CI.yml
 @show GROUP
 
 @time begin
-    if GROUP == "All" || GROUP == "Basic"
-        #join_path(test_path, ...) does not work, because test_path is unknown in new module
-        #@safetestset "Tests" include("test/test_util_slurm.jl")
-        @time @safetestset "test_util_slurm" include("test_util_slurm.jl")
-        #@safetestset "Tests" include("test/test_isofeltype.jl")
-        @time @safetestset "test_isofeltype" include("test_isofeltype.jl")
-        #@safetestset "Tests" include("test/test_util.jl")
-        @time @safetestset "test_util" include("test_util.jl")
-        #@safetestset "Tests" include("test/test_data_management.jl")
-        @time @safetestset "test_data_management" include("test_data_management.jl")
-    end
-
-    if GROUP == "All" || GROUP == "MCMCChains"
-        #join_path(test_path, ...) does not work, because test_path is unknown in new module
-        #@safetestset "Tests" include("test/test_mcmcchains.jl")
-        @time @safetestset "test_mcmcchains" include("test_mcmcchains.jl")
-    end
-
     if GROUP == "All" || GROUP == "CairoMakie"
         #join_path(test_path, ...) does not work, because test_path is unknown in new module
         #@safetestset "Tests" include("test/test_cairomakie.jl")

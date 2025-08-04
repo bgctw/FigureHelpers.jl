@@ -1,5 +1,5 @@
 using Parameters: @with_kw
-import KernelDensity
+#import KernelDensity
 
 cm_per_inch = 2.54
 
@@ -55,6 +55,17 @@ Properties and defaults
     size_inches::Tuple{FT,FT} = cm2inch.((17.5,17.5/golden_ratio))
 end
 
+# function MakieConfig(cfg::MakieConfig; 
+#         target = cfg.target, 
+#         pt_per_unit = cfg.pt_per_unit, 
+#         filetype = cfg.filetype,
+#         fontsize = cfg.fontsize,
+#         size_inches = cfg.size_inches,
+#         )
+#         MakieConfig(target, pt_per_unit, filetype, fontsize, size_inches)
+# end
+
+
 
 #ppt_MakieConfig(;target = :presentation, pt_per_unit = 0.75/2, filetype = "png", fontsize=18, size_inches = cm2inch.((29,29/golden_ratio)), kwargs...) = MakieConfig(;target, pt_per_unit, filetype, fontsize, size_inches, kwargs...)
 # size so that orginal size covers half a wide landscape slide of 33cm
@@ -63,17 +74,18 @@ end
 # target of 10inch wide screen slide
 ppt_MakieConfig(;target = :presentation, filetype = "png", fontsize=18, size_inches = (5.0,5.0/golden_ratio), kwargs...) = MakieConfig(;target, filetype, fontsize, size_inches, kwargs...)
 
-paper_MakieConfig(;size_inches = cm2inch.((8.3,8.3/golden_ratio)), kwargs...) = MakieConfig(;size_inches, kwargs...)
-
+paper_MakieConfig(;size_inches = cm2inch.((8.3,8.3/golden_ratio)), filetype = "pdf", kwargs...) = MakieConfig(;size_inches, filetype, kwargs...)
 
 """
-    pdf_figure = (size_inches = cm2inch.((8.3,8.3/golden_ratio)); fontsize=9, pt_per_unit = 0.75)
-    pdf_figure_axis = (size_inches = cm2inch.((8.3,8.3/golden_ratio)); fontsize=9, pt_per_unit = 0.75, kwargs...)
+    pdf_figure_axis(...; makie_config, ....)
+    pdf_figure(width2height, xfac=1.0; makie_config)
+    pdf_figure(size_inches = cm2inch.((8.3,8.3/golden_ratio)); fontsize=9, pt_per_unit = 0.75)
 
 Creates a figure with specified resolution/size and fontsize 
 for given figure size. 
 `pdf_figure_axis`, in addition returns an Makie.Axis created with kwargs.
-They uses by default `pt_per_unit=0.75` to conform to png display and save. Remember to devide fontsize and other sizes specified elsewhere by this factor.
+They use by default `pt_per_unit=0.75` to conform to png display and save. 
+Remember to devide fontsize and other sizes specified elsewhere by this factor.
 See also [`cm2inch`](@ref) and `save`.
 """    
 function pdf_figure end;
@@ -84,7 +96,7 @@ function pdf_figure_axis end;
 
 Save figure with file updated extension `cfg.filetype` to subdirectory `cfg.filetype`
 of given path of filename.
-Set `pt_per_unit` to `makie_config.pt_per_unit`.
+Sets `pt_per_unit` to `makie_config.pt_per_unit`.
 """
 function save_with_config end   
 

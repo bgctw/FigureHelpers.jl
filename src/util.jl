@@ -1,3 +1,4 @@
+# used in Extensions to pass limimits
 "similar to passmissing, creates a function that retuns nothing, if any of its arguments is noting."
 passnothing(f) = (xs...; kwargs...) -> any(isnothing, xs) ? nothing : f(xs...;kwargs...)
 

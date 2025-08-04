@@ -73,9 +73,9 @@ jobs:
       - run: |
           julia --project=docs -e '
             using Documenter: doctest, DocMeta
-            using TwPrototypes     # change TwPrototypes to the name of your package
-            DocMeta.setdocmeta!(TwPrototypes, :DocTestSetup, :(using TwPrototypes); recursive=true)
-            doctest(TwPrototypes)' 
+            using FigureHelpers     # change FigureHelpers to the name of your package
+            DocMeta.setdocmeta!(FigureHelpers, :DocTestSetup, :(using FigureHelpers); recursive=true)
+            doctest(FigureHelpers)' 
       - run: julia --project=docs docs/make.jl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

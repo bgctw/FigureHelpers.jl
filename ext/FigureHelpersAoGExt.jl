@@ -1,25 +1,17 @@
-module TwPrototypesAoGExt
+module FigureHelpersAoGExt
 
 function __init__()
-    @info "TwPrototypes: loading TwPrototypesAoGExt"
+    @info "FigureHelpers: loading FigureHelpersAoGExt"
 end
 
 
 isdefined(Base, :get_extension) ? 
     (using CairoMakie,AlgebraOfGraphics) : (using ..CairoMakie,..AlgebraOfGraphics)
-import TwPrototypes as CM
-using TwPrototypes
+import FigureHelpers as CP
+using FigureHelpers
     
-"""
-    set_default_CMTheme!(;makie_config=MakieConfig())
 
-Setting sensible defaults with taking care of pt_per_unit in MakieConfig.
-
-When saving png, there is a difference in size between the produced figure 
-in print and display on a monitor and its dpi settings.
-This routine adjusts several seetings given in inch by deviding `makie_config.pt_per_unit`.
-"""
-function CM.set_default_CMTheme!(;makie_config=MakieConfig())
+function CP.set_default_AoGTheme!(;makie_config=MakieConfig())
     set_aog_theme!()
     local cfg = makie_config
     legend_theme = Theme(
@@ -61,10 +53,11 @@ function CM.set_default_CMTheme!(;makie_config=MakieConfig())
     update_theme!(axis_theme)
 end
 
+
 """
 Draw aog plot into Makie figure and legend into subfigue
 """
-function CM.draw_with_legend!(fig, plt; fig_pos_legend = fig[1,2], kwargs...)
+function CP.draw_with_legend!(fig, plt; fig_pos_legend = fig[1,2], kwargs...)
     local _legend = draw!(fig[1,1], plt)
     legend!(fig_pos_legend, _legend)
     _legend

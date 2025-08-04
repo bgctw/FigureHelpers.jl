@@ -3,7 +3,7 @@
 Several convenience functions that provide simple calls to common functionality.
 
 ```@docs
-set_default_CMTheme!
+set_default_AoGTheme!
 draw_with_legend!
 ```
 

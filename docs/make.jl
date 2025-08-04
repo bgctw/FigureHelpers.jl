@@ -1,24 +1,21 @@
 using Documenter
-using TwPrototypes
+using FigureHelpers
 
 push!(LOAD_PATH,"../src/")
-makedocs(sitename="TwPrototypes.jl",
+makedocs(sitename="FigureHelpers.jl",
          doctest  = false, 
          pages = [
             "Home" => "index.md",
-            "Pkg utilities" => "pkg_utils.md",
-            "Data management" => "data_management.md",
-            "Dispatch" => "isofeltype.md",
             "Makie" => "makie.md",
             "AoG" => "aog.md",
          ],
-         #modules = [TwPrototypes],
+         #modules = [FigureHelpers],
          format = Documenter.HTML(prettyurls = false)
 )
 # Documenter can also automatically deploy documentation to gh-pages.
 # See "Hosting Documentation" and deploydocs() in the Documenter manual
 # for more information.
 deploydocs(
-    repo = "github.com/bgctw/TwPrototypes.jl.git",
+    repo = "github.com/bgctw/FigureHelpers.jl.git",
     devbranch = "main"
 )

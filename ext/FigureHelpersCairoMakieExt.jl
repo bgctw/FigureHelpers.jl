@@ -1,12 +1,12 @@
-module TwPrototypesCairoMakieExt
+module FigureHelpersCairoMakieExt
 
 function __init__()
-    @info "TwPrototypes: loading TwPrototypesCairoMakieExt"
+    @info "FigureHelpers: loading FigureHelpersCairoMakieExt"
 end
 
 isdefined(Base, :get_extension) ? (using CairoMakie) : (using ..CairoMakie)
-import TwPrototypes as CP
-using TwPrototypes
+import FigureHelpers as CP
+using FigureHelpers
 using KernelDensity: KernelDensity
 using StatsBase
 
@@ -15,19 +15,27 @@ function CP.pdf_figure_axis(args...; makie_config::MakieConfig = MakieConfig(), 
     fig, Axis(fig[1,1]; kwargs...)
 end
 
+function get_size_from_config(cfg)
+    72 .* cfg.size_inches ./ cfg.pt_per_unit # size_pt
+end
+function get_fontsize_from_config(cfg)
+    cfg.fontsize ./ cfg.pt_per_unit
+end
+
 function CP.pdf_figure(; makie_config::MakieConfig = MakieConfig())
-    local cfg = makie_config
-    size = 72 .* cfg.size_inches ./ cfg.pt_per_unit # size_pt
-    fig = Figure(;size, fontsize=cfg.fontsize ./ cfg.pt_per_unit)
+    size = get_size_from_config(makie_config)
+    fontsize = get_fontsize_from_config(makie_config)
+    Figure(;size, fontsize)
 end
 function CP.pdf_figure(size_inches::NTuple{2}; makie_config::MakieConfig = MakieConfig())
     makie_config = MakieConfig(makie_config; size_inches)
     pdf_figure(;makie_config)
 end
-function CP.pdf_figure(width2height::Number; makie_config::MakieConfig = MakieConfig())
-    size_inches = (makie_config.size_inches[1], makie_config.size_inches[1]/width2height)
-    makie_config = MakieConfig(makie_config; size_inches)
-    pdf_figure(;makie_config)
+function CP.pdf_figure(width2height::Number, xfac=1.0; makie_config::MakieConfig = MakieConfig())
+    wx = makie_config.size_inches[1] * xfac
+    wy = wx/width2height
+    makie_config_resized = MakieConfig(makie_config; size_inches = (wx, wy))
+    pdf_figure(;makie_config = makie_config_resized)
 end
 
 
@@ -93,7 +101,7 @@ function CP.density_params(chns, pars=names(chns, :parameters);
                 kwargs...)
             end
         end
-        xlim = passnothing(getindex)(xlims, i)
+        xlim = CP.passnothing(getindex)(xlims, i)
         !isnothing(xlim) && xlims!(ax, xlim)
     #hideydecorations!(ax,  ticklabels=false, ticks=false, grid=false)
         hideydecorations!(ax, label=false, ticklabels=true)
@@ -159,7 +167,6 @@ function histogram_params(chns, pars=names(chns, :parameters);
   #axislegend(only(contents(fig[2, column])))
   fig    
 end
-
 
 
 end

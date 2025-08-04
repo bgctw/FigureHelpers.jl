@@ -1,13 +1,8 @@
-# TwPrototypes.jl
+# FigureHelpers.jl
 
 ```@docs
- TwPrototypes
+ FigureHelpers
 ```
 
-```@contents
-Pages = ["isofeltype.md"]
-Depth = 2
-```
-
-See all the [github repository](https://github.com/bgctw/TwPrototypes.jl).
+See all the [github repository](https://github.com/bgctw/FigureHelpers.jl).
 
