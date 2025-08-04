@@ -2,8 +2,6 @@ using Test
 using FigureHelpers
 using CairoMakie
 #using AlgebraOfGraphics
-using AxisArrays: AxisArrays
-
 
 @testset "figure_conf with constants" begin
     makie_config = ppt_MakieConfig()
@@ -56,12 +54,4 @@ i_test_larger_margins = () -> begin
     passmissing(cumsum)
 end
 
-@testset "density_params" begin
-    a = reshape(randn(40*3*2), (40,3,2));
-    chn = AxisArrays.AxisArray(a; row=1:size(a,1), parameters=string.('a':'c'));
-    #plt = density_params(chn, AxisArrays.axes(chn,2));
-    plt = density_params(chn, ["a","b"]);
-    #display(plt)
-    @test plt isa CairoMakie.Figure
-end;
 

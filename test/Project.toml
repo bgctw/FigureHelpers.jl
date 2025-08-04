@@ -2,6 +2,7 @@
 AlgebraOfGraphics = "cbdf2221-f076-402e-a563-3d30da359d67"
 AxisArrays = "39de3d68-74b9-583c-8d2d-e117c070f3a9"
 CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 MCMCChains = "c7f686f2-ff18-58e9-bc7b-31028e88f75d"
 SafeTestsets = "1bc83da4-3b8d-516f-aca4-4fe02f6d838f"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

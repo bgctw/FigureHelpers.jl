@@ -130,19 +130,5 @@ Axis-object is returned
 """
 function axis_contents end
 
-"""
-    density_params(chns, pars=names(chns, :parameters); 
-        makie_config::MakieConfig=MakieConfig(), 
-        fig = figure_conf(cm2inch.((8.3,8.3/1.618)); makie_config), 
-        column = 1, xlims=nothing, 
-        labels=nothing, colors = nothing, ylabels = nothing, normalize = false, 
-        kwargs_axis = repeat([()],length(pars)), 
-        prange = (0.025, 0.975), # do not extend x-scale to outliers
-        kwargs...
-    )
-
-Plot density from MCMCChains.value with facets for each parameter.
-"""
-function density_params end
 
 

@@ -18,8 +18,6 @@ jobs:
       matrix:
         # https://youtu.be/fQJrEQIRPZU?list=PLP8iPy9hna6Tze1CReUAQweWHyNdXaPNb&t=967
         group:
-          - Basic
-          - MCMCChains
           - CairoMakie
           #- JET
         version:

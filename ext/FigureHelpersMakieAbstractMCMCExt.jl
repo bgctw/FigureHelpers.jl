@@ -1,64 +1,73 @@
-module FigureHelpersCairoMakieExt
+module FigureHelpersMakieAbstractMCMCExt
 
-function __init__()
-    @info "FigureHelpers: loading FigureHelpersCairoMakieExt"
-end
+# function __init__()
+#     @info "FigureHelpers: loading FigureHelpersMakieAbstractMCMCExt"
+# end
 
-isdefined(Base, :get_extension) ? (using CairoMakie) : (using ..CairoMakie)
-import FigureHelpers as CP
+import FigureHelpers as CP 
 using FigureHelpers
-using KernelDensity: KernelDensity
+using Makie
+#using Distributions
+using AbstractMCMC
 using StatsBase
 
-function CP.figure_conf_axis(args...; makie_config::MakieConfig = MakieConfig(), kwargs...) 
-    fig = figure_conf(args...; makie_config)
-    fig, Axis(fig[1,1]; kwargs...)
+const AChains = AbstractMCMC.AbstractChains
+
+function CP.plot_chn(chns::AChains, args...; kwargs...)
+    fig = Figure(; size = (1_000, 800))
+    CP.plot_chn!(fig, chns, args...; kwargs...)
 end
 
-function get_size_from_config(cfg)
-    72 .* cfg.size_inches ./ cfg.pt_per_unit # size_pt
-end
-function get_fontsize_from_config(cfg)
-    cfg.fontsize ./ cfg.pt_per_unit
-end
+function CP.plot_chn!(fig::Figure, 
+    chns::AChains; linkaxes=false, 
+    param_label="Parameter estimate",
+    params = names(chns, :parameters)
+    )
+    n_chains = size(chns, 3)
+    n_samples = length(chns)
+    for (i, param) in enumerate(params)
+        ax = Axis(fig[i, 1]; ylabel = string(param))
+        for chain in 1:n_chains
+            values = chns[:, param, chain]
+            lines!(ax, 1:n_samples, values; label = string(chain))
+        end
 
-function CP.figure_conf(; makie_config::MakieConfig = MakieConfig())
-    size = get_size_from_config(makie_config)
-    fontsize = get_fontsize_from_config(makie_config)
-    Figure(;size, fontsize)
+        hideydecorations!(ax; label = false)
+        if i < length(params)
+            hidexdecorations!(ax; grid = false)
+        else
+            ax.xlabel = "Iteration"
+        end
+    end
+    for (i, param) in enumerate(params)
+        ax = Axis(fig[i, 2]; ylabel = string(param))
+        for chain in 1:n_chains
+            values = chns[:, param, chain]
+            density!(ax, values; label = string(chain))
+        end
+
+        hideydecorations!(ax)
+        if linkaxes 
+          if i < length(params)
+              hidexdecorations!(ax; grid = false)
+          else
+              ax.xlabel = param_label
+          end
+        else
+            if i < length(params)
+                hidexdecorations!(ax; grid = false, ticks=false, ticklabels=false)
+            else
+                ax.xlabel = string(param)
+            end
+        end
+    end
+    axes = [only(contents(fig[i, 2])) for i in 1:length(params)]
+    if linkaxes 
+      linkxaxes!(axes...)
+    end
+    axislegend(first(axes))
+    return(fig)
 end
-function CP.figure_conf(size_inches::NTuple{2}; makie_config::MakieConfig = MakieConfig())
-    makie_config = MakieConfig(makie_config; size_inches)
-    figure_conf(;makie_config)
-end
-function CP.figure_conf(width2height::Number, xfac=1.0; makie_config::MakieConfig = MakieConfig())
-    wx = makie_config.size_inches[1] * xfac
-    wy = wx/width2height
-    makie_config_resized = MakieConfig(makie_config; size_inches = (wx, wy))
-    figure_conf(;makie_config = makie_config_resized)
-end
-
-
-function CP.save_with_config(filename::AbstractString, fig::Union{Figure, Makie.FigureAxisPlot, Scene}; makie_config = MakieConfig(), args...)
-    local cfg = makie_config
-    pathname, ext = splitext(filename) 
-    ext != "" && @warn "replacing extension $ext by $(cfg.filetype)"
-    bname = basename(pathname) * "." *  cfg.filetype
-    dir = joinpath(dirname(pathname), string(cfg.target))
-    filename_cfg = joinpath(dir,bname)
-    mkpath(dir)
-    #save(filename_cfg, fig, args...)
-    save(filename_cfg, fig, args...; pt_per_unit = makie_config.pt_per_unit)
-    filename_cfg
-end
-
-CP.hidexdecoration!(ax; label = false, ticklabels = false, ticks = false, grid = false, minorgrid = false, minorticks = false, kwargs...) = hidexdecorations!(ax; label, ticklabels, ticks, grid, minorgrid, minorticks, kwargs...)
-
-CP.hideydecoration!(ax; label = false, ticklabels = false, ticks = false, grid = false, minorgrid = false, minorticks = false, kwargs...) = hideydecorations!(ax; label, ticklabels, ticks, grid, minorgrid, minorticks, kwargs...)
-
-CP.axis_contents(axis::Axis) = axis
-CP.axis_contents(figpos::GridLayout) = axis_contents(first(contents(figpos)))
-CP.axis_contents(figpos::GridPosition) = axis_contents(first(contents(figpos)))
 
 
 # plot density from MCMCChains.value
@@ -118,12 +127,12 @@ function CP.density_params(chns, pars=names(chns, :parameters);
 end
 
 """
-Histogram of several variables of a 3D array, i.e. MCPCChain.
+Histogram of several variables of a 3D array, i.e. MCMCChain.
 
-The desnity plot gives wrong impressions, if probability mass is concentrated
-at the borders,
+The desnity plot may give wrong impressions, if probability mass is concentrated
+at the borders, which can be inspected by plotting histograms instead.
 """
-function histogram_params(chns, pars=names(chns, :parameters); 
+function CP.histogram_params(chns, pars=names(chns, :parameters); 
   makie_config::MakieConfig=MakieConfig(), 
   fig = figure_conf(cm2inch.((8.3,8.3/1.618)); makie_config), 
   column = 1, xlims=nothing, 
@@ -142,7 +151,9 @@ function histogram_params(chns, pars=names(chns, :parameters);
       ax = Axis(fig[i, column]; ylabel=ylabels[i], kwargs_axis[i]...)
       ylims!(ax, ylimits)
       if isnothing(colors)
-          colors = ax.palette.color[]
+            pal = fig.scene.theme.palette 
+            #pal = ax.palette
+            colors = pal.color[]
       end
       for i_chain in 1:n_chains
           _values = chns[:, param, i_chain]
@@ -152,7 +163,7 @@ function histogram_params(chns, pars=names(chns, :parameters);
               #strokearound = true,
               kwargs...)
       end
-      xlim = passnothing(getindex)(xlims, i)
+      xlim = CP.passnothing(getindex)(xlims, i)
       !isnothing(xlim) && xlims!(ax, xlim)
   #hideydecorations!(ax,  ticklabels=false, ticks=false, grid=false)
       hideydecorations!(ax, label=false, ticklabels=true)
@@ -169,4 +180,6 @@ function histogram_params(chns, pars=names(chns, :parameters);
 end
 
 
+
 end
+

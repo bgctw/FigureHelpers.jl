@@ -5,5 +5,6 @@
 
 # FigureHelpers.jl
 
-Concepts in Julia that have not found its proper package.
+Conveniently adjust figure properties for publication and presentation.
+
 

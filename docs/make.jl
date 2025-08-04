@@ -1,5 +1,6 @@
 using Documenter
 using FigureHelpers
+using CairoMakie, Distributions
 
 push!(LOAD_PATH,"../src/")
 makedocs(sitename="FigureHelpers.jl",

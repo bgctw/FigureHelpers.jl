@@ -1,4 +1,7 @@
 [deps]
+CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 FigureHelpers = "9ae22f58-2487-4805-bfc5-386577db46c8"
+MCMCChains = "c7f686f2-ff18-58e9-bc7b-31028e88f75d"
 Missings = "e1d29d7a-bbdc-5cf2-9ac0-f12de2c33e28"

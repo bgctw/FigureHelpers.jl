@@ -5,8 +5,7 @@ function __init__()
 end
 
 
-isdefined(Base, :get_extension) ? 
-    (using CairoMakie,AlgebraOfGraphics) : (using ..CairoMakie,..AlgebraOfGraphics)
+using Makie, AlgebraOfGraphics
 import FigureHelpers as CP
 using FigureHelpers
     
