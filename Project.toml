@@ -23,7 +23,7 @@ FigureHelpersMakieExt = ["Makie", "KernelDensity"]
 
 [compat]
 AbstractMCMC = "5.7.2"
-AlgebraOfGraphics = "0.9.4, 0.10"
+AlgebraOfGraphics = "0.9.4, 0.10, 0.11"
 Distributions = "0.25.120"
 KernelDensity = "0.6.10"
 MCMCChains = "6.0.7"
